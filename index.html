@@ -22,14 +22,13 @@
             overflow: hidden;
         }
 
-        /* MATRIX CANVAS */
         #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.2; }
 
         /* LOGIN SCREEN */
         #gate-screen {
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             height: 100vh; text-align: center; z-index: 100; position: fixed; width: 100%; top: 0;
-            background: rgba(5, 5, 5, 0.85);
+            background: rgba(5, 5, 5, 1);
         }
 
         .moria-gate {
@@ -48,34 +47,47 @@
             border-left: 1px solid var(--neon-blue); border-right: 1px solid var(--neon-blue);
             height: 100vh; overflow-y: auto; position: relative; z-index: 10;
             background: rgba(5, 5, 5, 0.95);
+            transition: transform 0.8s ease-in, opacity 0.5s;
+        }
+
+        /* TUNNEL EFFEKT */
+        .tunnel-effect { transform: scale(5); opacity: 0; pointer-events: none; }
+
+        /* ASSESSMENT AREA */
+        #assessment-page {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--dark-bg); z-index: 200; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
         }
 
         h1 { color: var(--neon-gold); text-shadow: 0 0 15px var(--neon-gold); }
-        .highlight { color: var(--terminal-green); font-weight: bold; }
-        
         .box { border: 1px solid #333; padding: 20px; background: rgba(255,255,255,0.03); margin-bottom: 20px; }
 
-        .timer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-        .timer-label { font-size: 0.8rem; color: #888; text-transform: uppercase; }
         .timer-val { font-size: 1.1rem; color: var(--neon-blue); font-weight: bold; }
 
-        /* TÜREN SYSTEM */
         .door-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 30px; }
         .door {
             border: 2px solid var(--neon-blue); padding: 20px; text-align: center;
             cursor: pointer; transition: 0.3s; background: rgba(0, 242, 255, 0.05);
         }
-        .door:hover { box-shadow: 0 0 20px var(--neon-blue); background: rgba(0, 242, 255, 0.1); }
-        .door h3 { font-size: 0.9rem; color: var(--neon-gold); }
+        .door:hover { box-shadow: 0 0 20px var(--neon-blue); }
+
+        .vibrate { animation: shake 0.2s infinite; }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            20% { transform: translate(-3px, 0px) rotate(-1deg); }
+            40% { transform: translate(3px, 2px) rotate(1deg); }
+            60% { transform: translate(-1px, -1px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
 
         .promo-btn {
             border: 2px solid var(--alert-red); color: var(--alert-red); padding: 10px 20px;
             cursor: pointer; text-decoration: none; display: block; width: fit-content; margin: 20px auto;
         }
-        .promo-btn:hover { background: var(--alert-red); color: black; box-shadow: 0 0 20px var(--alert-red); }
     </style>
 </head>
-<body>
+<body id="main-body">
 
 <canvas id="matrix-canvas"></canvas>
 
@@ -83,49 +95,45 @@
     <div class="moria-gate">
         <h2 style="color: var(--neon-gold);">SECURITY CHECK: LEGAL_AUTH</h2>
         <p style="color: var(--neon-blue);">"Welcher StGB-Artikel behandelt die Verleumdung?"</p>
-        <div class="input-area"><input type="text" id="quizAnswer" placeholder="174" autofocus autocomplete="off"></div>
+        <div class="input-area"><input type="text" id="quizAnswer" placeholder="Art. ??? StGB" autofocus autocomplete="off"></div>
     </div>
 </div>
 
 <div id="dossier">
     <header>
-        <p style="color: var(--terminal-green);">> IDENTITÄT BESTÄTIGT: WACHTMEISTER REMO TRESCH</p>
+        <p style="color: var(--terminal-green);">> IDENTITÄT: WACHTMEISTER REMO TRESCH</p>
         <h1>REMO TRESCH</h1>
-        
-        <div class="timer-grid">
-            <div class="box">
-                <div class="timer-label">Lebenszeit</div>
-                <div id="age-timer" class="timer-val">Berechne...</div>
-            </div>
-            <div class="box">
-                <div class="timer-label">Zeit bis Pension (65)</div>
-                <div id="retirement-timer" class="timer-val">Berechne...</div>
-            </div>
+        <div style="display:flex; gap:20px; margin-bottom: 20px;">
+            <div class="box">Lebenszeit: <span id="age-timer" class="timer-val"></span></div>
+            <div class="box">Bis Pension (65): <span id="retirement-timer" class="timer-val"></span></div>
         </div>
     </header>
 
     <div class="box">
         <h2>MISSION: KRIMINALPOLIZEI URI</h2>
-        <p>Als <span class="highlight">Schichtchef SVZ Erstfeld</span> koordiniere ich die SIASS und führe mein Team zielstrebig und loyal. Mein Ziel ist die Kripo Uri, um meine Erfahrung von 14 Dienstjahren in die Ermittlungsarbeit einzubringen.</p>
+        <p>Schichtchef SVZ Erstfeld | SIASS-Koordination | 14 Jahre Dienst-Erfahrung</p>
     </div>
 
-    <h2 style="text-align:center; color: var(--neon-blue);">STGB KNOWLEDGE DOORS</h2>
+    <h2 style="text-align:center; color: var(--neon-blue);">WAHL DER ERMITTLUNGSTÜR</h2>
     <div class="door-container">
-        <div class="door" onclick="askArticle('180', 'Drohung')">
-            <h3>TÜR 1</h3>
-            <p>Drohung</p>
-        </div>
-        <div class="door" onclick="askArticle('189', 'Sexuelle Nötigung')">
-            <h3>TÜR 2</h3>
-            <p>Sexuelle Nötigung</p>
-        </div>
-        <div class="door" onclick="askArticle('143', 'Unbefugte Datenbeschaffung')">
-            <h3>TÜR 3</h3>
-            <p>Datenbeschaffung</p>
-        </div>
+        <div class="door" onclick="enterTunnel('180', 'Drohung')"><h3>TÜR 1</h3><p>Drohung</p></div>
+        <div class="door" onclick="enterTunnel('189', 'Sexuelle Nötigung')"><h3>TÜR 2</h3><p>Sex. Nötigung</p></div>
+        <div class="door" onclick="enterTunnel('143', 'Unbefugte Datenbeschaffung')"><h3>TÜR 3</h3><p>Daten</p></div>
     </div>
+    
+    <a href="https://www.bullenpower-uri.ch" target="_blank" class="promo-btn">BULLENPOWER-URI.CH</a>
+</div>
 
-    <a href="https://www.bullenpower-uri.ch" target="_blank" class="promo-btn">WERBUNG: BULLENPOWER-URI.CH</a>
+<div id="assessment-page">
+    <h1 id="task-title">ASSESSMENT MODUS</h1>
+    <div class="box" id="task-box">
+        <p id="math-question">Berechne: (48 / 6) * (12 + 8) - 14 = ?</p>
+        <input type="number" id="mathAnswer" style="background:transparent; border:1px solid var(--neon-blue); color:white; padding:10px; font-size:1.5rem; text-align:center;">
+        <br><br>
+        <button onclick="checkMath()" style="padding:10px 20px; background:var(--neon-blue); border:none; cursor:pointer; font-weight:bold;">ANTWORT PRÜFEN</button>
+        <p id="feedback-text" style="margin-top:20px;"></p>
+        <button onclick="exitTunnel()" style="margin-top:20px; background:none; border:none; color:grey; cursor:pointer; text-decoration:underline;">Zurück zum Dossier</button>
+    </div>
 </div>
 
 <script>
@@ -137,7 +145,6 @@
     const fontSize = 16;
     const columns = canvas.width / fontSize;
     const drops = Array(Math.floor(columns)).fill(1);
-
     function drawMatrix() {
         ctx.fillStyle = 'rgba(5, 5, 5, 0.05)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -154,26 +161,23 @@
 
     // ZEIT BERECHNUNGEN
     const birth = new Date(1993, 11, 28, 14, 3);
-    const retirement = new Date(2058, 11, 28, 14, 3); // 1993 + 65 Jahre
-
+    const retirement = new Date(2058, 11, 28, 14, 3);
     function updateTimers() {
         const now = new Date();
-        
-        function format(diff) {
-            const y = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
-            const d = Math.floor((diff % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
+        const format = (diff) => {
+            const y = Math.floor(diff / 31557600000);
+            const d = Math.floor((diff % 31557600000) / 86400000);
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
             return `${y}J ${d}T ${h}h ${m}m ${s}s`;
-        }
-
+        };
         document.getElementById('age-timer').innerText = format(now - birth);
         document.getElementById('retirement-timer').innerText = format(retirement - now);
     }
     setInterval(updateTimers, 1000);
 
-    // LOGIN & TÜREN
+    // LOGIN
     function checkAnswer() {
         if (document.getElementById('quizAnswer').value.includes("174")) {
             document.getElementById('gate-screen').style.display = 'none';
@@ -183,12 +187,43 @@
     }
     document.getElementById('quizAnswer').addEventListener('keypress', (e) => { if (e.key === 'Enter') checkAnswer(); });
 
-    function askArticle(correct, title) {
-        const val = prompt(`StGB Wissenstest: Welcher Artikel regelt "${title}"?`);
-        if (val && val.includes(correct)) {
-            alert("Korrekt! Zugriff auf Sektion gewährt.");
+    // TUNNEL MODUS & ASSESSMENT
+    let currentTask = "";
+    function enterTunnel(art, label) {
+        currentTask = art;
+        const dossier = document.getElementById('dossier');
+        dossier.classList.add('tunnel-effect');
+        
+        setTimeout(() => {
+            dossier.style.display = 'none';
+            document.getElementById('assessment-page').style.display = 'flex';
+            document.getElementById('task-title').innerText = `SEKTION: ${label} (Art. ${art})`;
+            document.getElementById('feedback-text').innerText = "";
+            document.getElementById('mathAnswer').value = "";
+        }, 800);
+    }
+
+    function exitTunnel() {
+        document.getElementById('assessment-page').style.display = 'none';
+        const dossier = document.getElementById('dossier');
+        dossier.style.display = 'block';
+        dossier.classList.remove('tunnel-effect');
+    }
+
+    function checkMath() {
+        const ans = document.getElementById('mathAnswer').value;
+        const feedback = document.getElementById('feedback-text');
+        const body = document.getElementById('main-body');
+
+        if (ans == "146") { // (8 * 20) - 14 = 146
+            feedback.innerHTML = "<span style='color:var(--terminal-green);'>GRATULIERE REMO! Volltreffer. Flöh!</span>";
+            body.classList.add('vibrate');
+            setTimeout(() => body.classList.remove('vibrate'), 2000);
         } else {
-            alert("Falscher Artikel. Zugriff verweigert.");
+            feedback.innerHTML = "<span style='color:var(--alert-red);'>WARNUNG: Fehler im System.<br>Wie überall passieren Fehler. Wichtig ist es, daraus zu lernen.</span>";
+            // Ein kurzer roter Blitz-Effekt
+            body.style.boxShadow = "inset 0 0 100px red";
+            setTimeout(() => body.style.boxShadow = "none", 500);
         }
     }
 </script>
