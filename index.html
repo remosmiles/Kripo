@@ -64,13 +64,12 @@
             text-align: center;
             outline: none;
             width: 90%;
-            text-transform: uppercase;
-            letter-spacing: 5px;
+            letter-spacing: 2px;
         }
 
         /* --- DOSSIER CONTENT --- */
         #dossier {
-            display: none; /* Versteckt bis Quiz gelöst */
+            display: none; 
             padding: 3rem;
             max-width: 1000px;
             margin: auto;
@@ -146,22 +145,22 @@
 
 <div id="gate-screen">
     <div class="moria-gate">
-        <h2 style="color: var(--neon-gold); text-shadow: none;">SECURITY CHECK: MORIA_GATE_01</h2>
-        <p class="quiz-question">"Ein Ring, sie zu knechten, sie alle zu finden, ins Dunkel zu treiben und ewig zu binden – In welchem Land wurde er geschmiedet?"</p>
+        <h2 style="color: var(--neon-gold); text-shadow: none;">SECURITY CHECK: LEGAL_KNOWLEDGE_AUTH</h2>
+        <p class="quiz-question">"Bei welchem Artikel im Schweizerischen Strafgesetzbuch (StGB) handelt es sich um Verleumdung?"</p>
         <div class="input-area">
-            <input type="text" id="quizAnswer" placeholder="ANTWORT" autofocus autocomplete="off">
+            <input type="text" id="quizAnswer" placeholder="Art. XXX StGB" autofocus autocomplete="off">
         </div>
-        <p style="font-size: 0.7rem; margin-top: 30px; opacity: 0.4; color: var(--terminal-green);">SYSTEM-HINWEIS: Lösung ist der Name des dunklen Landes (M....r)</p>
+        <p style="font-size: 0.7rem; margin-top: 30px; opacity: 0.4; color: var(--terminal-green);">HINWEIS FÜR PRÜFER: Format 'Art. 174 StGB'</p>
     </div>
 </div>
 
 <div id="dossier">
     <header>
-        <p style="color: var(--terminal-green); margin: 0;">> DECRYPTION SUCCESSFUL. WELCOME, WACHTMEISTER.</p>
+        <p style="color: var(--terminal-green); margin: 0;">> LEGAL VERIFICATION SUCCESSFUL. ACCESS GRANTED.</p>
         <h1>REMO TRESCH</h1>
         <div class="status-bar">
             <div class="status-blink"></div>
-            <span>AKTUELL: SCHICHTCHEF SVZ ERSTFELD | SIASS-KOORDINATOR</span>
+            <span>AKTUELL: WACHTMEISTER | SCHICHTCHEF SVZ ERSTFELD | SIASS-KOORDINATOR</span>
         </div>
     </header>
 
@@ -183,12 +182,12 @@
 
     <div class="box" style="margin-top: 25px;">
         <h2>MISSION: KRIMINALPOLIZEI URI</h2>
-        <p>Als <strong>Schichtchef im Schwerverkehrszentrum</strong> sorge ich täglich dafür, dass "der Laden läuft". Ich koordiniere komplexe Sicherheitsabläufe (SIASS) und leite mein Team auch in Drucksituationen souverän.</p>
-        <p>Meine Erfahrung von der Strasse, kombiniert mit meiner Führungskompetenz und meinem Interesse an digitaler Ermittlung (Cyber), machen mich zum idealen Kandidaten für die <strong>Kripo Uri</strong>. Ich bringe die nötige Ruhe und die kreative Schärfe mit, um Ermittlungen erfolgreich zum Ziel zu führen.</p>
+        <p>Als <strong>Schichtchef im Schwerverkehrszentrum</strong> koordiniere ich die SIASS und trage die Verantwortung für den reibungslosen Schichtbetrieb. Mein Führungsstil ist geprägt von Loyalität und Zielstrebigkeit – ich sorge dafür, dass der Laden läuft.</p>
+        <p>Nach 14 Jahren im Dienst, davon 12 an der Front, bringe ich die nötige Erfahrung mit, um komplexe Ermittlungen bei der Kripo Uri zu führen. Meine kreative Ader und mein technisches Verständnis machen mich besonders für moderne Ermittlungsmethoden (Cyber-Ermittlung) wertvoll.</p>
     </div>
 
     <div class="contact-footer">
-        <p>BEREIT FÜR DIE NÄCHSTE EBENE?</p>
+        <p>BEREIT FÜR DAS PERSÖNLICHE ASSESSMENT?</p>
         <a href="mailto:deine-email@beispiel.ch" class="btn-contact">KONTAKT INITIALISIEREN</a>
     </div>
 
@@ -199,13 +198,20 @@
 
 <script>
     function checkAnswer() {
-        const answer = document.getElementById('quizAnswer').value.toLowerCase().trim();
+        const input = document.getElementById('quizAnswer').value.trim();
         const gate = document.getElementById('gate-screen');
         const dossier = document.getElementById('dossier');
 
-        // Die Antwort ist "mordor"
-        if (answer === 'mordor') {
-            // Sound-Effekt oder Animation könnte hier stehen
+        // Akzeptiert verschiedene Schreibweisen zur Sicherheit
+        const validAnswers = [
+            "Art. 174 StGB", 
+            "Art. 174", 
+            "174", 
+            "Artikel 174 StGB",
+            "Art 174 StGB"
+        ];
+
+        if (validAnswers.includes(input)) {
             gate.style.transition = 'all 0.8s ease';
             gate.style.filter = 'blur(20px)';
             gate.style.opacity = '0';
@@ -213,10 +219,9 @@
             setTimeout(() => {
                 gate.style.display = 'none';
                 dossier.style.display = 'block';
-                // Animation für das Dossier-Erscheinen
                 dossier.style.animation = 'fadeIn 1s ease-in';
             }, 800);
-        } else if (answer !== "") {
+        } else if (input !== "") {
             document.getElementById('quizAnswer').style.borderBottom = '2px solid var(--alert-red)';
             setTimeout(() => {
                 document.getElementById('quizAnswer').style.borderBottom = '2px solid var(--neon-gold)';
@@ -224,7 +229,6 @@
         }
     }
 
-    // Lauscht auf die Enter-Taste
     document.getElementById('quizAnswer').addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             checkAnswer();
