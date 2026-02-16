@@ -58,7 +58,6 @@
             justify-content: center; align-items: center; text-align: center;
         }
 
-        h1 { color: var(--neon-gold); text-shadow: 0 0 15px var(--neon-gold); }
         .box { border: 1px solid #333; padding: 20px; background: rgba(255,255,255,0.03); margin-bottom: 20px; }
         .timer-val { font-size: 1.1rem; color: var(--neon-blue); font-weight: bold; }
 
@@ -95,17 +94,20 @@
     <div class="moria-gate">
         <h2 style="color: var(--neon-gold);">AUTHORIZATION REQUIRED</h2>
         <p style="color: var(--neon-blue);">"Welcher StGB-Artikel behandelt die Verleumdung?"</p>
-        <div class="input-area"><input type="text" id="quizAnswer" placeholder="Art. ??? StGB" autofocus autocomplete="off"></div>
+        <div class="input-area">
+            <input type="text" id="quizAnswer" placeholder="Antwort eingeben..." autofocus autocomplete="off">
+        </div>
+        <button onclick="checkAnswer()" style="margin-top:20px; background:var(--neon-blue); border:none; padding:10px 20px; cursor:pointer; font-weight:bold;">ZUGRIFF PRÜFEN</button>
     </div>
 </div>
 
 <div id="dossier">
     <header>
         <p style="color: var(--terminal-green);">> ZUGRIFF GEWÄHRT: DOSSIER TRESCH_R</p>
-        <h1>REMO TRESCH</h1>
+        <h1 style="color:var(--neon-gold);">REMO TRESCH</h1>
         <div style="display:flex; gap:20px; margin-bottom: 20px;">
-            <div class="box">Lebenszeit: <span id="age-timer" class="timer-val"></span></div>
-            <div class="box">Bis Pension (65): <span id="retirement-timer" class="timer-val"></span></div>
+            <div class="box">Lebenszeit: <br><span id="age-timer" class="timer-val"></span></div>
+            <div class="box">Bis Pension (65): <br><span id="retirement-timer" class="timer-val"></span></div>
         </div>
     </header>
 
@@ -116,7 +118,6 @@
     </div>
 
     <h2 style="text-align:center; color: var(--neon-blue);">SYSTEM-ASSESSMENT</h2>
-    <p style="text-align:center; font-size: 0.8rem;">Wählen Sie eine Tür, um die operative Belastbarkeit zu prüfen:</p>
     <div class="door-container">
         <div class="door" onclick="enterTunnel('180', 'Drohung')"><h3>TÜR 1</h3><p>Art. 180</p></div>
         <div class="door" onclick="enterTunnel('189', 'Sexuelle Nötigung')"><h3>TÜR 2</h3><p>Art. 189</p></div>
@@ -127,19 +128,19 @@
 </div>
 
 <div id="assessment-page">
-    <h1 id="task-title">ASSESSMENT MODUS</h1>
-    <div class="box" id="task-box" style="max-width: 600px;">
+    <div class="box" id="task-box" style="max-width: 600px; margin: auto; position: relative; top: 20%;">
+        <h1 id="task-title">ASSESSMENT</h1>
         <p id="math-question">Lösen Sie die folgende Gleichung zur Verifizierung:<br><br><strong>(48 / 6) * (12 + 8) - 14 = ?</strong></p>
         <input type="number" id="mathAnswer">
         <br><br>
         <button onclick="checkMath()" style="padding:10px 30px; background:var(--neon-blue); border:none; cursor:pointer; font-weight:bold; color:black;">PRÜFEN</button>
-        <div id="feedback-text" style="margin-top:20px; min-height: 50px; line-height: 1.4;"></div>
+        <div id="feedback-text" style="margin-top:20px; min-height: 50px;"></div>
         <button onclick="exitTunnel()" style="margin-top:30px; background:none; border:none; color:grey; cursor:pointer; text-decoration:underline;">Zurück zum Dossier</button>
     </div>
 </div>
 
 <script>
-    // MATRIX & FLEE CANVAS LOGIC
+    // MATRIX & FLEE CANVAS
     const mCanvas = document.getElementById('matrix-canvas');
     const fCanvas = document.getElementById('flee-canvas');
     const mCtx = mCanvas.getContext('2d');
@@ -152,7 +153,6 @@
     }
     window.onresize = resize; resize();
 
-    // Matrix Rain
     const drops = Array(Math.floor(mCanvas.width/16)).fill(1);
     function drawMatrix() {
         mCtx.fillStyle = 'rgba(5, 5, 5, 0.05)';
@@ -168,6 +168,81 @@
     }
     setInterval(drawMatrix, 50);
 
-    // Flöhe Effekt (Partikel)
     function spawnFlees() {
-        for(let i=0; i<10
+        for(let i=0; i<100; i++) {
+            flees.push({x: Math.random()*fCanvas.width, y: -20, s: Math.random()*3+2, v: Math.random()*5+2});
+        }
+    }
+    function drawFlees() {
+        fCtx.clearRect(0,0,fCanvas.width, fCanvas.height);
+        fCtx.fillStyle = "#d4af37";
+        flees.forEach((f, i) => {
+            fCtx.beginPath(); fCtx.arc(f.x, f.y, f.s, 0, Math.PI*2); fCtx.fill();
+            f.y += f.v; if(f.y > fCanvas.height) flees.splice(i, 1);
+        });
+        requestAnimationFrame(drawFlees);
+    }
+    drawFlees();
+
+    // TIMER
+    const birth = new Date(1993, 11, 28, 14, 3);
+    const retirement = new Date(2058, 11, 28, 14, 3);
+    setInterval(() => {
+        const now = new Date();
+        const format = (d) => {
+            const y = Math.floor(d/31557600000);
+            const days = Math.floor((d%31557600000)/86400000);
+            const h = Math.floor((d%86400000)/3600000);
+            const m = Math.floor((d%3600000)/60000);
+            const s = Math.floor((d%60000)/1000);
+            return `${y}J ${days}T ${h}h ${m}m ${s}s`;
+        };
+        document.getElementById('age-timer').innerText = format(now - birth);
+        document.getElementById('retirement-timer').innerText = format(retirement - now);
+    }, 1000);
+
+    // LOGIN LOGIK - Akzeptiert jetzt alles, was 174 enthält
+    function checkAnswer() {
+        const input = document.getElementById('quizAnswer').value;
+        if (input.includes("174")) {
+            document.getElementById('gate-screen').style.display = 'none';
+            document.getElementById('dossier').style.display = 'block';
+        } else if (input !== "") {
+            alert("Zugriff verweigert. Artikel unbekannt.");
+        }
+    }
+    document.getElementById('quizAnswer').addEventListener('keypress', (e) => { if (e.key === 'Enter') checkAnswer(); });
+
+    // NAVIGATION
+    function enterTunnel(art, label) {
+        document.getElementById('dossier').classList.add('tunnel-effect');
+        setTimeout(() => {
+            document.getElementById('dossier').style.display = 'none';
+            document.getElementById('assessment-page').style.display = 'flex';
+            document.getElementById('task-title').innerText = `PRÜFUNG: ${label}`;
+            document.getElementById('feedback-text').innerText = "";
+            document.getElementById('mathAnswer').value = "";
+        }, 800);
+    }
+
+    function exitTunnel() {
+        document.getElementById('assessment-page').style.display = 'none';
+        document.getElementById('dossier').style.display = 'block';
+        document.getElementById('dossier').classList.remove('tunnel-effect');
+    }
+
+    function checkMath() {
+        const ans = document.getElementById('mathAnswer').value;
+        const feedback = document.getElementById('feedback-text');
+        if (ans == "146") {
+            feedback.innerHTML = "<span style='color:var(--terminal-green);'>HERVORRAGEND! Analytische Präzision bestätigt. Flöh! Die Aufgabe wurde fehlerfrei gelöst.</span>";
+            document.getElementById('main-body').classList.add('vibrate');
+            spawnFlees();
+            setTimeout(() => document.getElementById('main-body').classList.remove('vibrate'), 2000);
+        } else {
+            feedback.innerHTML = "<span style='color:var(--alert-red);'>HINWEIS: Das Resultat weicht vom Soll-Wert ab. In der Ermittlungsarbeit sind Details entscheidend. Aber: Wie überall im Leben können Fehler passieren. Entscheidend ist die Bereitschaft, diese zu erkennen und daraus zu lernen.</span>";
+        }
+    }
+</script>
+</body>
+</html>
