@@ -22,6 +22,18 @@
             overflow: hidden;
         }
 
+        /* --- MATRIX CANVAS --- */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        /* --- GATE SCREEN --- */
         #gate-screen {
             display: flex;
             flex-direction: column;
@@ -29,27 +41,21 @@
             align-items: center;
             height: 100vh;
             text-align: center;
-            background: radial-gradient(circle, #1a1a1a 0%, #050505 100%);
             z-index: 100;
             position: fixed;
             width: 100%;
             top: 0;
+            background: rgba(5, 5, 5, 0.7);
         }
 
         .moria-gate {
             border: 2px solid var(--neon-blue);
-            padding: 50px;
+            padding: 40px;
             border-radius: 20px;
             box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
             max-width: 650px;
             background: rgba(0, 0, 0, 0.9);
-        }
-
-        .quiz-question {
-            color: var(--neon-blue);
-            margin-bottom: 30px;
-            font-size: 1.3rem;
-            line-height: 1.6;
+            z-index: 101;
         }
 
         .input-area input {
@@ -64,85 +70,163 @@
             width: 90%;
         }
 
+        /* --- DOSSIER CONTENT --- */
         #dossier {
             display: none; 
-            padding: 3rem;
-            max-width: 1000px;
+            padding: 2rem;
+            max-width: 900px;
             margin: auto;
             border-left: 1px solid var(--neon-blue);
             border-right: 1px solid var(--neon-blue);
             height: 100vh;
             overflow-y: auto;
+            position: relative;
+            z-index: 10;
+            background: rgba(5, 5, 5, 0.95);
         }
 
-        h1 { color: var(--neon-gold); text-shadow: 0 0 15px var(--neon-gold); font-size: 3rem; }
+        h1 { color: var(--neon-gold); text-shadow: 0 0 15px var(--neon-gold); margin-bottom: 5px; }
         .highlight { color: var(--terminal-green); font-weight: bold; }
         
         .box {
             border: 1px solid #333;
-            padding: 25px;
+            padding: 20px;
             background: rgba(255,255,255,0.03);
             margin-bottom: 20px;
+        }
+
+        #age-timer {
+            font-size: 1.2rem;
+            color: var(--neon-blue);
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* --- WERBUNG BUTTON --- */
+        .promo-btn {
+            background: transparent;
+            border: 2px solid var(--alert-red);
+            color: var(--alert-red);
+            padding: 15px 25px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: 0.3s;
+            display: block;
+            margin: 20px auto;
+            text-decoration: none;
+            text-align: center;
+            width: fit-content;
+        }
+
+        .promo-btn:hover {
+            background: var(--alert-red);
+            color: black;
+            box-shadow: 0 0 20px var(--alert-red);
         }
     </style>
 </head>
 <body>
 
+<canvas id="matrix-canvas"></canvas>
+
 <div id="gate-screen">
     <div class="moria-gate">
         <h2 style="color: var(--neon-gold);">SECURITY CHECK: LEGAL_AUTH</h2>
-        <p class="quiz-question">"Bei welchem Artikel im Schweizerischen Strafgesetzbuch (StGB) handelt es sich um Verleumdung?"</p>
+        <p style="color: var(--neon-blue);">"Bei welchem Artikel im Schweizerischen Strafgesetzbuch (StGB) handelt es sich um Verleumdung?"</p>
         <div class="input-area">
             <input type="text" id="quizAnswer" placeholder="Art. XXX StGB" autofocus autocomplete="off">
         </div>
-        <p style="font-size: 0.8rem; margin-top: 30px; color: #555;">HINWEIS FÜR PRÜFER: Art. 174 StGB</p>
+        <p style="font-size: 0.7rem; margin-top: 25px; color: #555;">SYSTEM-HINT: Art. 174 StGB</p>
     </div>
 </div>
 
 <div id="dossier">
     <header>
-        <p style="color: var(--terminal-green);">> VERIFICATION SUCCESSFUL. ACCESS GRANTED.</p>
+        <p style="color: var(--terminal-green);">> ACCESS GRANTED: WACHTMEISTER TRESCH</p>
         <h1>REMO TRESCH</h1>
-        <p><strong>WACHTMEISTER | SCHICHTCHEF SVZ ERSTFELD</strong></p>
+        <div id="age-timer">Initialisiere Lebensuhr...</div>
     </header>
 
-    <div class="box">
-        <h2>PROFIL</h2>
-        <p>> <span class="highlight">ERFAHRUNG:</span> 12 JAHRE STRASSE / 2 JAHRE SVZ (FÜHRUNG)</p>
-        <p>> <span class="highlight">STATUS:</span> KOORDINATOR SIASS</p>
-        <p>> <span class="highlight">ATTRIBUE:</span> LOYAL, ZIELSTREBIG, KREATIV</p>
+    <div class="box" style="margin-top: 20px;">
+        <h2>OPERATIVER STATUS</h2>
+        <p>> <span class="highlight">POSITION:</span> Schichtchef SVZ Erstfeld</p>
+        <p>> <span class="highlight">VERANTWORTUNG:</span> SIASS-Koordination & Führung</p>
+        <p>> <span class="highlight">DIENSTZEIT:</span> 14 Jahre (12 Strasse / 2 Führung)</p>
     </div>
 
     <div class="box">
-        <h2>MISSION: KRIPO URI</h2>
-        <p>Als Schichtchef sorge ich dafür, dass der Laden läuft. Mein technisches Verständnis und meine operative Erfahrung an der Front machen mich bereit für die Kriminalpolizei.</p>
+        <h2>MISSION & SKILLS</h2>
+        <p>Zuverlässigkeit, Loyalität und Zielstrebigkeit sind mein Fundament. Als Schichtchef sorge ich dafür, dass der Laden läuft – präzise, ruhig und kreativ.</p>
     </div>
+
+    <a href="https://www.bullenpower-uri.ch" target="_blank" class="promo-btn">Werbung: Bullenpower Uri</a>
+
+    <footer style="text-align: center; opacity: 0.4; font-size: 0.8rem; margin-top: 40px;">
+        DECRYPTION KEY: ART174STGB | REMO TRESCH 2024
+    </footer>
 </div>
 
 <script>
+    // --- MATRIX EFFEKT ---
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function drawMatrix() {
+        ctx.fillStyle = 'rgba(5, 5, 5, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#00ff41';
+        ctx.font = fontSize + 'px monospace';
+
+        for (let i = 0; i < drops.length; i++) {
+            const text = characters.charAt(Math.floor(Math.random() * characters.length));
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        }
+    }
+    setInterval(drawMatrix, 50);
+
+    // --- ALTERSBERECHNUNG ---
+    const birthDate = new Date(1993, 11, 28, 14, 3); // 28.12.1993, 14:03 (Monat ist 0-basiert)
+
+    function updateAge() {
+        const now = new Date();
+        const diff = now - birthDate;
+        
+        const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+        const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 365.25)) / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('age-timer').innerHTML = 
+            `Lebenszeit: ${years}J ${days}T ${hours}Std ${minutes}Min ${seconds}Sek`;
+    }
+    setInterval(updateAge, 1000);
+
+    // --- LOGIN LOGIK ---
     function checkAnswer() {
         const input = document.getElementById('quizAnswer').value.trim();
-        const gate = document.getElementById('gate-screen');
-        const dossier = document.getElementById('dossier');
-
-        // Akzeptiert verschiedene Formate der richtigen Antwort
-        const correctOnes = ["174", "Art. 174", "Art. 174 StGB", "Art 174"];
-
-        if (correctOnes.some(v => input.includes(v))) {
-            gate.style.opacity = '0';
-            setTimeout(() => {
-                gate.style.display = 'none';
-                dossier.style.display = 'block';
-                document.body.style.overflow = 'auto';
-            }, 500);
+        if (input.includes("174")) {
+            document.getElementById('gate-screen').style.display = 'none';
+            document.getElementById('dossier').style.display = 'block';
+            document.body.style.overflow = 'auto';
+            updateAge();
         } else if (input !== "") {
             document.getElementById('quizAnswer').style.borderBottom = '2px solid var(--alert-red)';
         }
     }
 
-    document.getElementById('quizAnswer').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') checkAnswer();
-    });
+    document.getElementById('quizAnswer').addEventListener('keypress', (e) => { if (e.key === 'Enter') checkAnswer(); });
 </script>
 
 </body>
