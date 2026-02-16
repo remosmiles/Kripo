@@ -19,10 +19,9 @@
             font-family: 'Courier New', Courier, monospace;
             margin: 0;
             height: 100vh;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
-        /* --- GATE / QUIZ SCREEN --- */
         #gate-screen {
             display: flex;
             flex-direction: column;
@@ -42,16 +41,15 @@
             padding: 50px;
             border-radius: 20px;
             box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
-            max-width: 600px;
-            background: rgba(0, 0, 0, 0.8);
+            max-width: 650px;
+            background: rgba(0, 0, 0, 0.9);
         }
 
         .quiz-question {
             color: var(--neon-blue);
-            font-style: italic;
             margin-bottom: 30px;
-            font-size: 1.2rem;
-            line-height: 1.5;
+            font-size: 1.3rem;
+            line-height: 1.6;
         }
 
         .input-area input {
@@ -64,10 +62,8 @@
             text-align: center;
             outline: none;
             width: 90%;
-            letter-spacing: 2px;
         }
 
-        /* --- DOSSIER CONTENT --- */
         #dossier {
             display: none; 
             padding: 3rem;
@@ -75,69 +71,18 @@
             margin: auto;
             border-left: 1px solid var(--neon-blue);
             border-right: 1px solid var(--neon-blue);
-            background: rgba(10, 10, 10, 0.9);
+            height: 100vh;
+            overflow-y: auto;
         }
 
-        h1 { color: var(--neon-gold); text-shadow: 0 0 15px var(--neon-gold); font-size: 3rem; margin-bottom: 0; }
-        h2 { color: var(--neon-blue); border-bottom: 1px solid var(--neon-blue); padding-bottom: 10px; text-transform: uppercase; }
-
-        .status-bar {
-            background: rgba(0, 242, 255, 0.1);
-            padding: 10px;
-            border: 1px solid var(--neon-blue);
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-        }
-
-        .status-blink {
-            height: 12px; width: 12px; background: var(--terminal-green);
-            border-radius: 50%; margin-right: 15px;
-            animation: blink 1.5s infinite;
-            box-shadow: 0 0 10px var(--terminal-green);
-        }
-
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
-
-        .profile-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-        }
-
+        h1 { color: var(--neon-gold); text-shadow: 0 0 15px var(--neon-gold); font-size: 3rem; }
+        .highlight { color: var(--terminal-green); font-weight: bold; }
+        
         .box {
             border: 1px solid #333;
             padding: 25px;
             background: rgba(255,255,255,0.03);
-            position: relative;
-        }
-
-        .box::before {
-            content: ""; position: absolute; top: -2px; left: -2px; width: 15px; height: 15px;
-            border-top: 2px solid var(--neon-gold); border-left: 2px solid var(--neon-gold);
-        }
-
-        .highlight { color: var(--terminal-green); font-weight: bold; }
-
-        .contact-footer {
-            margin-top: 60px;
-            text-align: center;
-            border-top: 1px solid #333;
-            padding-top: 20px;
-        }
-
-        .btn-contact {
-            color: var(--neon-blue);
-            text-decoration: none;
-            border: 1px solid var(--neon-blue);
-            padding: 10px 20px;
-            transition: 0.3s;
-        }
-
-        .btn-contact:hover {
-            background: var(--neon-blue);
-            color: black;
-            box-shadow: 0 0 20px var(--neon-blue);
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -145,55 +90,33 @@
 
 <div id="gate-screen">
     <div class="moria-gate">
-        <h2 style="color: var(--neon-gold); text-shadow: none;">SECURITY CHECK: LEGAL_KNOWLEDGE_AUTH</h2>
+        <h2 style="color: var(--neon-gold);">SECURITY CHECK: LEGAL_AUTH</h2>
         <p class="quiz-question">"Bei welchem Artikel im Schweizerischen Strafgesetzbuch (StGB) handelt es sich um Verleumdung?"</p>
         <div class="input-area">
             <input type="text" id="quizAnswer" placeholder="Art. XXX StGB" autofocus autocomplete="off">
         </div>
-        <p style="font-size: 0.7rem; margin-top: 30px; opacity: 0.4; color: var(--terminal-green);">HINWEIS FÜR PRÜFER: Format 'Art. 174 StGB'</p>
+        <p style="font-size: 0.8rem; margin-top: 30px; color: #555;">HINWEIS FÜR PRÜFER: Art. 174 StGB</p>
     </div>
 </div>
 
 <div id="dossier">
     <header>
-        <p style="color: var(--terminal-green); margin: 0;">> LEGAL VERIFICATION SUCCESSFUL. ACCESS GRANTED.</p>
+        <p style="color: var(--terminal-green);">> VERIFICATION SUCCESSFUL. ACCESS GRANTED.</p>
         <h1>REMO TRESCH</h1>
-        <div class="status-bar">
-            <div class="status-blink"></div>
-            <span>AKTUELL: WACHTMEISTER | SCHICHTCHEF SVZ ERSTFELD | SIASS-KOORDINATOR</span>
-        </div>
+        <p><strong>WACHTMEISTER | SCHICHTCHEF SVZ ERSTFELD</strong></p>
     </header>
 
-    <div class="profile-grid">
-        <div class="box">
-            <h2>DIENST-PROFIL</h2>
-            <p><span class="highlight">POSITION:</span> Wachtmeister / Schichtchef</p>
-            <p><span class="highlight">ERFAHRUNG:</span> 12 Jahre Frontdienst (Strasse), 2 Jahre SVZ Erstfeld</p>
-            <p><span class="highlight">FOKUS:</span> Koordination SIASS, Personalführung, operative Sicherheit</p>
-        </div>
-        <div class="box">
-            <h2>EIGENSCHAFTEN</h2>
-            <p>> LOYALITÄT: <span class="highlight">MAXIMAL</span></p>
-            <p>> ZIELSTREBIGKEIT: <span class="highlight">KONSTANT</span></p>
-            <p>> KREATIVITÄT: <span class="highlight">ÜBERDURCHSCHNITTLICH</span></p>
-            <p>> ZUVERLÄSSIGKEIT: <span class="highlight">WACHTMEISTER-STANDARD</span></p>
-        </div>
+    <div class="box">
+        <h2>PROFIL</h2>
+        <p>> <span class="highlight">ERFAHRUNG:</span> 12 JAHRE STRASSE / 2 JAHRE SVZ (FÜHRUNG)</p>
+        <p>> <span class="highlight">STATUS:</span> KOORDINATOR SIASS</p>
+        <p>> <span class="highlight">ATTRIBUE:</span> LOYAL, ZIELSTREBIG, KREATIV</p>
     </div>
 
-    <div class="box" style="margin-top: 25px;">
-        <h2>MISSION: KRIMINALPOLIZEI URI</h2>
-        <p>Als <strong>Schichtchef im Schwerverkehrszentrum</strong> koordiniere ich die SIASS und trage die Verantwortung für den reibungslosen Schichtbetrieb. Mein Führungsstil ist geprägt von Loyalität und Zielstrebigkeit – ich sorge dafür, dass der Laden läuft.</p>
-        <p>Nach 14 Jahren im Dienst, davon 12 an der Front, bringe ich die nötige Erfahrung mit, um komplexe Ermittlungen bei der Kripo Uri zu führen. Meine kreative Ader und mein technisches Verständnis machen mich besonders für moderne Ermittlungsmethoden (Cyber-Ermittlung) wertvoll.</p>
+    <div class="box">
+        <h2>MISSION: KRIPO URI</h2>
+        <p>Als Schichtchef sorge ich dafür, dass der Laden läuft. Mein technisches Verständnis und meine operative Erfahrung an der Front machen mich bereit für die Kriminalpolizei.</p>
     </div>
-
-    <div class="contact-footer">
-        <p>BEREIT FÜR DAS PERSÖNLICHE ASSESSMENT?</p>
-        <a href="mailto:deine-email@beispiel.ch" class="btn-contact">KONTAKT INITIALISIEREN</a>
-    </div>
-
-    <footer style="text-align: center; margin-top: 40px; font-size: 0.7rem; opacity: 0.3;">
-        ID: TRESCH_R_KAPO_URI_RECRUITMENT_2024
-    </footer>
 </div>
 
 <script>
@@ -202,46 +125,25 @@
         const gate = document.getElementById('gate-screen');
         const dossier = document.getElementById('dossier');
 
-        // Akzeptiert verschiedene Schreibweisen zur Sicherheit
-        const validAnswers = [
-            "Art. 174 StGB", 
-            "Art. 174", 
-            "174", 
-            "Artikel 174 StGB",
-            "Art 174 StGB"
-        ];
+        // Akzeptiert verschiedene Formate der richtigen Antwort
+        const correctOnes = ["174", "Art. 174", "Art. 174 StGB", "Art 174"];
 
-        if (validAnswers.includes(input)) {
-            gate.style.transition = 'all 0.8s ease';
-            gate.style.filter = 'blur(20px)';
+        if (correctOnes.some(v => input.includes(v))) {
             gate.style.opacity = '0';
-            
             setTimeout(() => {
                 gate.style.display = 'none';
                 dossier.style.display = 'block';
-                dossier.style.animation = 'fadeIn 1s ease-in';
-            }, 800);
+                document.body.style.overflow = 'auto';
+            }, 500);
         } else if (input !== "") {
             document.getElementById('quizAnswer').style.borderBottom = '2px solid var(--alert-red)';
-            setTimeout(() => {
-                document.getElementById('quizAnswer').style.borderBottom = '2px solid var(--neon-gold)';
-            }, 500);
         }
     }
 
     document.getElementById('quizAnswer').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            checkAnswer();
-        }
+        if (e.key === 'Enter') checkAnswer();
     });
 </script>
-
-<style>
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-</style>
 
 </body>
 </html>
